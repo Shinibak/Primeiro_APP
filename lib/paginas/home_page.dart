@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:primeiro_app/paginas/pagina_secundaria.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -10,13 +11,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  final PageController _pageController = PageController();
+  int indexBottomNavegatorBar = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +20,52 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: PageView(
+        controller: _pageController,
+        children: [
+          Container(
+            color: Colors.blue,
+            child: const Center(
+              child: Text(
+                "Batata",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 40,
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
+          ),
+          Container(color: Colors.red),
+          const PaginaSecundaria(),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: indexBottomNavegatorBar,
+          onTap: (int page) => {
+                setState(() {
+                  indexBottomNavegatorBar = page;
+                }),
+                _pageController.animateToPage(
+                  page,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                ),
+              },
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_laundry_service_sharp),
+              label: 'item 1',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_laundry_service_sharp),
+              label: 'item 2',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.local_laundry_service_sharp),
+              label: 'item 3',
+            ),
+          ]), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
